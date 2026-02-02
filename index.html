@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitsBlaze | IA para Barberías</title>
+    <meta name="description"
+        content="Recepcionistas IA que agendan citas, responden clientes y eliminan el ausentismo en tu barbería. Implementación en 7 días.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- CSS Variables (Brand Colors) --- */
+        :root {
+            --primary-orange: #FF8C00;
+            --primary-orange-hover: #e07b00;
+            --deep-blue: #0B1E3D;
+            --gray-bg: #f5f7fa;
+            --text-dark: #1a1a2e;
+            --text-light: #555;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Reset & Base --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* --- Header --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(11, 30, 61, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .brand-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-icon {
+            color: var(--primary-orange);
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        header nav a:hover {
+            color: var(--primary-orange);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            background-image: linear-gradient(rgba(11, 30, 61, 0.85), rgba(11, 30, 61, 0.7)), url('hero_bg.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-orange);
+            font-size: 3rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-orange), #ff6a00);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--deep-blue);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* --- Problem Section --- */
+        .problem {
+            padding: 80px 40px;
+            background: var(--gray-bg);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--deep-blue);
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .problem-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .problem-card .icon-box {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-orange), #ff6a00);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--deep-blue);
+        }
+
+        /* --- Solution Section --- */
+        .solution {
+            padding: 80px 40px;
+            background: var(--deep-blue);
+            color: white;
+        }
+
+        .solution .section-title h2 {
+            color: white;
+        }
+
+        .solution .section-title p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .solution-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-orange);
+        }
+
+        .solution-card h3 {
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Benefits Section --- */
+        .benefits {
+            padding: 80px 40px;
+            background: white;
+        }
+
+        .benefit-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .benefit-card .stat {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: var(--primary-orange);
+            font-weight: 700;
+        }
+
+        .benefit-card h3 {
+            margin-top: 0.5rem;
+            color: var(--deep-blue);
+        }
+
+        /* --- Social Proof --- */
+        .social-proof {
+            padding: 60px 40px;
+            background: var(--gray-bg);
+            text-align: center;
+        }
+
+        .logos-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 2rem;
+            opacity: 0.6;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        /* --- FAQ Section --- */
+        .faq {
+            padding: 80px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #eee;
+            padding: 1.5rem 0;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--deep-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-answer {
+            color: var(--text-light);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--deep-blue);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .footer-cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* --- WhatsApp Floating Button --- */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            z-index: 9999;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+        }
+
+        .whatsapp-float svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero h1 span {
+                font-size: 2.5rem;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="brand-logo">
+            <span class="brand-icon">⚡</span> BITSBLAZE
+        </div>
+        <nav>
+            <a href="#solucion">Solución</a>
+            <a href="#beneficios">Beneficios</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Tu barbería atendiendo clientes<br><span>24/7 con IA</span></h1>
+            <p>Implementamos recepcionistas con Inteligencia Artificial que responden a tus clientes, agendan cortes
+                y eliminan el ausentismo mientras tú te concentras en cortar.</p>
+            <div class="hero-buttons">
+                <a href="https://wa.me/51950739185?text=Hola%2C%20tengo%20una%20barbería%20y%20quiero%20información%20sobre%20la%20Recepcionista%20IA"
+                    target="_blank" class="btn btn-primary">Quiero mi Recepcionista IA</a>
+                <button class="btn btn-secondary"
+                    onclick="document.querySelector('.solution').scrollIntoView({behavior: 'smooth'})">Ver cómo
+                    funciona</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="section-title">
+            <h2>¿Te suena familiar?</h2>
+            <p>Los dolores que enfrentan las barberías todos los días</p>
+        </div>
+        <div class="grid-3">
+            <div class="problem-card">
+                <div class="icon-box">📱</div>
+                <h3>"¿Hay turno para hoy?"</h3>
+                <p>Te escriben al WhatsApp mientras estás cortando. No contestas a tiempo y el cliente se va a otra
+                    barbería.</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon-box">👻</div>
+                <h3>Clientes fantasma</h3>
+                <p>Agendan turno y no llegan. Pierdes 30-45 minutos de tu tiempo que pudiste usar con otro cliente.</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon-box">📋</div>
+                <h3>Agenda en el caos</h3>
+                <p>Libreta, papel, mensajes de WhatsApp... Tu agenda está en 3 lugares diferentes y siempre hay
+                    confusión.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="solucion">
+        <div class="section-title">
+            <h2>La Solución: Tu Recepcionista IA</h2>
+            <p>Un asistente virtual que trabaja 24/7 por ti</p>
+        </div>
+        <div class="grid-3">
+            <div class="solution-card">
+                <h3>💬 Responde al instante</h3>
+                <p>Tu IA contesta WhatsApp en segundos, incluso a las 11pm cuando cierras. Nunca más pierdes un cliente
+                    por demora.</p>
+            </div>
+            <div class="solution-card">
+                <h3>📅 Agenda automática</h3>
+                <p>El cliente elige barbero, servicio y horario. La IA lo confirma y actualiza tu Google Calendar en
+                    tiempo real.</p>
+            </div>
+            <div class="solution-card">
+                <h3>🔔 Recordatorios anti-ghosteo</h3>
+                <p>Envía recordatorios automáticos 24h y 2h antes del turno. Reduce el ausentismo hasta un 60%.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="beneficios">
+        <div class="section-title">
+            <h2>Resultados Reales</h2>
+            <p>Lo que logran las barberías que usan BitsBlaze</p>
+        </div>
+        <div class="grid-3">
+            <div class="benefit-card">
+                <div class="stat">+40%</div>
+                <h3>Más turnos agendados</h3>
+                <p>Al responder 24/7, capturas clientes que antes perdías.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="stat">-60%</div>
+                <h3>Menos ausentismo</h3>
+                <p>Los recordatorios automáticos reducen los "plantones".</p>
+            </div>
+            <div class="benefit-card">
+                <div class="stat">7 días</div>
+                <h3>Implementación Express</h3>
+                <p>En una semana tu barbería está funcionando con IA.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof Section -->
+    <section class="social-proof">
+        <div class="section-title">
+            <h2>Barberías que ya confían en nosotros</h2>
+        </div>
+        <div class="logos-row">
+            <div>💈 The Barber House</div>
+            <div>💈 Corte & Estilo</div>
+            <div>💈 BarberKing</div>
+            <div>💈 Studio 27</div>
+        </div>
+        <div
+            style="margin-top: 2rem; display: flex; justify-content: center; gap: 20px; align-items: center; opacity: 0.6;">
+            <span>Tecnología Segura:</span>
+            <strong>Meta Business Partner</strong>
+            <strong>OpenAI</strong>
+            <strong>Supabase</strong>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="section-title" style="text-align: center;">
+            <h2>Preguntas Frecuentes</h2>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">¿La IA puede manejar varios barberos?</div>
+            <div class="faq-answer">Sí, configura la agenda de cada barbero individualmente. El cliente elige con quién
+                quiere cortarse y la IA verifica disponibilidad en tiempo real.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">¿Cuánto tarda la implementación?</div>
+            <div class="faq-answer">Nuestro proceso "Fast-Track" deja tu sistema corriendo en menos de 7 días hábiles.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">¿Necesito cambiar mi número de WhatsApp?</div>
+            <div class="faq-answer">No, integramos la inteligencia artificial directamente en tu línea de WhatsApp
+                Business actual.</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto">
+        <div class="footer-cta">
+            <h2>¿Listo para modernizar tu barbería?</h2>
+            <a href="https://calendly.com/hoter-rq/30min" target="_blank" class="btn btn-primary">Agendar Auditoría
+                Gratuita</a>
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacidad</a>
+            <a href="#">Términos</a>
+            <span>© 2026 BitsBlaze Agency</span>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/51950739185?text=Hola%2C%20tengo%20una%20barbería%20y%20quiero%20información%20sobre%20la%20Recepcionista%20IA"
+        target="_blank" class="whatsapp-float" aria-label="Chat en WhatsApp">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+    </a>
+
+</body>
+
+</html>
